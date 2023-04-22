@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse
-from .forms import StudentRegistration
+from .forms import StudentRegistration, UserRegistration
 from .models import User
 
 
@@ -55,3 +55,15 @@ def update_record(request, id):
         form = StudentRegistration(instance=update_usr)
 
     return render(request, 'enroll/updatestudents.html', {'form': form})
+
+def student_register(request):
+    if request.method == 'POST':
+        form = UserRegistration(request.POST)
+        if form.is_valid():
+            form.save()
+        form = UserRegistration()
+        return redirect(reverse('student_register'))
+    else:
+        form = UserRegistration()
+    
+    return render(request, 'enroll/adduser.html', {'form': form})
